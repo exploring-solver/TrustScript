@@ -1,61 +1,110 @@
 "use client";
 import React from 'react';
-import { 
-    Typography, 
-    Container, 
-    Grid, 
-    Link as MuiLink,
+import {
+  Typography,
+  Container,
+  Grid,
+  Link as MuiLink,
+  Box,
+  Divider,
+  IconButton,
 } from '@mui/material';
 import Link from 'next/link';
 
 function Footer() {
+  const socialIcons = [
+    { name: 'GitHub', link: "https://github.com/trustscript" },
+    { name: 'Twitter', link: "https://twitter.com/trustscript" },
+    { name: 'LinkedIn', link: "https://linkedin.com/company/trustscript" },
+    { name: 'Facebook', link: "https://facebook.com/trustscript" },
+  ];
+
   return (
-    <footer className="bg-gray-800 text-white mt-8">
-      <Container maxWidth="lg" className="py-6">
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" className="mb-2">About TrustScript</Typography>
-            <Typography variant="body2">
+    <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white mt-8 overflow-x-hidden">
+      <Container maxWidth="lg" className="py-12">
+        <Grid container spacing={4}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" className="mb-4 font-bold">About TrustScript</Typography>
+            <Typography variant="body2" className="mb-4">
               Secure and efficient document verification platform powered by AI and blockchain technology.
             </Typography>
+            <Box className="flex space-x-2">
+              {socialIcons.map(({ name, link }, index) => (
+                <IconButton
+                  key={index}
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="small"
+                  className="text-gray-400 hover:text-white"
+                >
+                  {name[0]}
+                </IconButton>
+              ))}
+            </Box>
           </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" className="mb-2">Quick Links</Typography>
-            <ul className="space-y-1">
-              <li>
-                <Link href="/" passHref>
-                  <MuiLink color="inherit" className="hover:text-blue-300">Home</MuiLink>
-                </Link>
-              </li>
-              <li>
-                <Link href="/verify" passHref>
-                  <MuiLink color="inherit" className="hover:text-blue-300">Verify</MuiLink>
-                </Link>
-              </li>
-              <li>
-                <Link href="/generate-report" passHref>
-                  <MuiLink color="inherit" className="hover:text-blue-300">Generate Report</MuiLink>
-                </Link>
-              </li>
-              <li>
-                <Link href="/manage-user" passHref>
-                  <MuiLink color="inherit" className="hover:text-blue-300">Manage Users</MuiLink>
-                </Link>
-              </li>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" className="mb-4 font-bold">Quick Links</Typography>
+            <ul className="space-y-2">
+              {[
+                { href: "/", text: "Home" },
+                { href: "/verify", text: "Verify Document" },
+                { href: "/upload", text: "Upload Document" },
+                { href: "/blockchain-explorer", text: "Blockchain Explorer" },
+                { href: "/audit-logs", text: "Audit Logs" },
+                { href: "/help-center", text: "Help Center" },
+              ].map((link, index) => (
+                <li key={index}>
+                  <Link href={link.href} passHref>
+                    <MuiLink color="inherit" className="hover:text-blue-300 transition-colors">
+                      {link.text}
+                    </MuiLink>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" className="mb-2">Contact Us</Typography>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" className="mb-4 font-bold">Our Services</Typography>
+            <ul className="space-y-2">
+              {[
+                "AI-Powered Verification",
+                "Blockchain Certification",
+                "Secure Document Storage",
+                "Real-time Auditing",
+                "Custom Integration",
+              ].map((service, index) => (
+                <li key={index} className="text-gray-300">{service}</li>
+              ))}
+            </ul>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" className="mb-4 font-bold">Contact Us</Typography>
+            <Typography variant="body2" className="mb-2">
+              Email: info@trustscript.com
+            </Typography>
+            <Typography variant="body2" className="mb-2">
+              Phone: +1 (555) 123-4567
+            </Typography>
             <Typography variant="body2">
-              Email: info@docverify.com<br />
-              Phone: +1 (555) 123-4567<br />
-              Address: 123 Verification St, Secure City, 12345
+              Address: 123 Blockchain Ave, Secure City, 12345
             </Typography>
           </Grid>
         </Grid>
-        <Typography variant="body2" className="text-center mt-4">
-          © 2024 TrustScript. All rights reserved.
-        </Typography>
+        <Divider className="my-8 bg-gray-600" />
+        <Box className="flex flex-col sm:flex-row justify-between items-center">
+          <Typography variant="body2" className="text-center sm:text-left mb-4 sm:mb-0">
+            © 2024 TrustScript. All rights reserved.
+          </Typography>
+          <Box className="flex space-x-4">
+            <MuiLink href="/privacy-policy" color="inherit" className="hover:text-blue-300 transition-colors">
+              Privacy Policy
+            </MuiLink>
+            <MuiLink href="/terms-of-service" color="inherit" className="hover:text-blue-300 transition-colors">
+              Terms of Service
+            </MuiLink>
+          </Box>
+        </Box>
       </Container>
     </footer>
   );
