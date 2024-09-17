@@ -13,12 +13,12 @@ contract UserManagement is AccessControl {
 
     function addIssuingAuthority(address _account) public {
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Only admin can assign issuer role");
-        grantRole(ISSUER_ROLE, _account);
+        _grantRole(ISSUER_ROLE, _account);
     }
 
     function addVerifyingAuthority(address _account) public {
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Only admin can assign verifier role");
-        grantRole(VERIFIER_ROLE, _account);
+        _grantRole(VERIFIER_ROLE, _account);
     }
 
     function isIssuingAuthority(address _account) public view returns (bool) {
