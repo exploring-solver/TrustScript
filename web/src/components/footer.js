@@ -13,10 +13,10 @@ import Link from 'next/link';
 
 function Footer() {
   const socialIcons = [
-    { name: 'GitHub', link: "https://github.com/trustscript" },
-    { name: 'Twitter', link: "https://twitter.com/trustscript" },
-    { name: 'LinkedIn', link: "https://linkedin.com/company/trustscript" },
-    { name: 'Facebook', link: "https://facebook.com/trustscript" },
+    { name: 'GitHub', link: "https://github.com/exploring-solver/TrustScript" },
+    { name: 'Twitter', link: "twitter.com/home" },
+    { name: 'LinkedIn', link: "/" },
+    
   ];
 
   return (
@@ -49,10 +49,10 @@ function Footer() {
               {[
                 { href: "/", text: "Home" },
                 { href: "/verify", text: "Verify Document" },
-                { href: "/upload", text: "Upload Document" },
-                { href: "/blockchain-explorer", text: "Blockchain Explorer" },
-                { href: "/audit-logs", text: "Audit Logs" },
-                { href: "/help-center", text: "Help Center" },
+                { href: "/upload-doc", text: "Upload Document" },
+                { href: "/explorer", text: "Blockchain Explorer" },
+                { href: "/audit", text: "Audit Logs" },
+                { href: "/help", text: "Help Center" },
               ].map((link, index) => (
                 <li key={index}>
                   <Link href={link.href} passHref>
@@ -81,13 +81,13 @@ function Footer() {
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" className="mb-4 font-bold">Contact Us</Typography>
             <Typography variant="body2" className="mb-2">
-              Email: info@trustscript.com
+              Email: anshjain9159@gmail.com
             </Typography>
             <Typography variant="body2" className="mb-2">
-              Phone: +1 (555) 123-4567
+              Phone: +91 (XXX) XXX-XXXX
             </Typography>
             <Typography variant="body2">
-              Address: 123 Blockchain Ave, Secure City, 12345
+              Address: CSE Block, MAIT Delhi
             </Typography>
           </Grid>
         </Grid>
@@ -96,14 +96,7 @@ function Footer() {
           <Typography variant="body2" className="text-center sm:text-left mb-4 sm:mb-0">
             © 2024 TrustScript. All rights reserved.
           </Typography>
-          <Box className="flex space-x-4">
-            <MuiLink href="/privacy-policy" color="inherit" className="hover:text-blue-300 transition-colors">
-              Privacy Policy
-            </MuiLink>
-            <MuiLink href="/terms-of-service" color="inherit" className="hover:text-blue-300 transition-colors">
-              Terms of Service
-            </MuiLink>
-          </Box>
+          
         </Box>
       </Container>
     </footer>

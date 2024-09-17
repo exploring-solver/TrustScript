@@ -20,7 +20,7 @@ import {
   Divider
 } from '@mui/material';
 import { 
-  FilePdf, 
+  
   FileText, 
   Image, 
   CheckCircle, 
@@ -39,7 +39,7 @@ const VerifyDocument = () => {
 
   const documentTypes = [
     { value: 'birth_certificate', label: 'Birth Certificate', icon: <FileText className="mr-2" /> },
-    { value: 'academic_transcript', label: 'Academic Transcript', icon: <FilePdf className="mr-2" /> },
+    { value: 'academic_transcript', label: 'Academic Transcript', icon: <FileText className="mr-2" /> },
     { value: 'experience_certificate', label: 'Experience Certificate', icon: <Image className="mr-2" /> },
   ];
 
