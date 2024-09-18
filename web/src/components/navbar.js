@@ -139,6 +139,8 @@ function Navbar() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
+              <Link href={"/superadmin"}><MenuItem onClick={handleClose}>Super Admin</MenuItem></Link>
+              <Link href={"/login"}><MenuItem onClick={handleClose}>Login</MenuItem></Link>
               <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>My account</MenuItem>
               <Divider />

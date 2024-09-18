@@ -5,6 +5,6 @@ const { protect } = require('../middlewares/authMiddleware');
 
 // router.post('/verify', protect, VerificationController.verifyDocument);
 // router.get('/status/:id', protect, VerificationController.getVerificationStatus);
-router.post('/verify', authenticateUser, authorizeRole(['verifier']), VerificationController.verifyCertificate);
+router.post('/verify', protect, VerificationController.verifyCertificate);
 
 module.exports = router;
