@@ -1,23 +1,31 @@
-"use client";
+"use client"
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box } from '@mui/material';
+import { TextField, Button, Typography, Box, CircularProgress } from '@mui/material';
 import { login } from '@/service/api';
 import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const { data } = await login(email, password);
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-      router.push('/dashboard');
+      
+      // Set a timeout for 2.5 seconds before redirecting
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 2500);
     } catch (error) {
       console.error('Login failed:', error);
+      // If login fails, stop loading immediately
+      setLoading(false);
     }
   };
 
@@ -43,9 +51,20 @@ const LoginPage = () => {
         margin="normal"
         required
       />
-      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
-        Login
+      <Button 
+        type="submit" 
+        fullWidth 
+        variant="contained" 
+        sx={{ mt: 3 }}
+        disabled={loading}
+      >
+        {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
       </Button>
+      {loading && (
+        <Box className="flex justify-center mt-4">
+          <span className="loading loading-infinity loading-lg"></span>
+        </Box>
+      )}
     </Box>
   );
 };

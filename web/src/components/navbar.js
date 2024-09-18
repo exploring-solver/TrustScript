@@ -141,10 +141,8 @@ function Navbar() {
             >
               <Link href={"/superadmin"}><MenuItem onClick={handleClose}>Super Admin</MenuItem></Link>
               <Link href={"/login"}><MenuItem onClick={handleClose}>Login</MenuItem></Link>
-              <Link href={"/login"}><MenuItem onClick={handleClose}>About Our solution(SIH-2024)</MenuItem></Link>
-              <MenuItem onClick={handleClose}>Help</MenuItem>
-              <Divider />
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <Link href={'/help'}><MenuItem onClick={handleClose} >Help</MenuItem></Link>
+              <Link href={"/"}><MenuItem onClick={handleClose}>About Our solution(SIH-2024)</MenuItem></Link>
             </Menu>
           </div>
         </Toolbar>

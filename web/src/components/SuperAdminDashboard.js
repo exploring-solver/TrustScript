@@ -1,8 +1,13 @@
+"use client"
 import React, { useState } from 'react';
-import { Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel, Box, Snackbar } from '@mui/material';
-import api, { register } from '@/service/api';
+import { Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel, Box, Snackbar, CircularProgress } from '@mui/material';
+import { register } from '@/service/api';
+import { useRouter } from 'next/navigation';
 
 const SuperAdminDashboard = () => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,12 +22,22 @@ const SuperAdminDashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const response = await register(formData);
+      await register(formData);
       setSnackbar({ open: true, message: 'User registered successfully' });
+      
+      // Keep loading state for 2.5 seconds before redirecting
+      setTimeout(() => {
+        setLoading(false);
+        router.push('/login');
+      }, 2500);
+      
       setFormData({ name: '', email: '', password: '', role: '' });
     } catch (error) {
+      console.error('Registering User failed:', error);
       setSnackbar({ open: true, message: 'Failed to register user' });
+      setLoading(false);
     }
   };
 
@@ -72,9 +87,20 @@ const SuperAdminDashboard = () => {
             <MenuItem value="individual">Individual</MenuItem>
           </Select>
         </FormControl>
-        <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-          Register User
+        <Button 
+          type="submit" 
+          fullWidth 
+          variant="contained" 
+          sx={{ mt: 3 }}
+          disabled={loading}
+        >
+          {loading ? <CircularProgress size={24} color="inherit" /> : 'Register'}
         </Button>
+        {loading && (
+          <Box className="flex justify-center mt-4">
+            <span className="loading loading-infinity loading-lg"></span>
+          </Box>
+        )}
       </Box>
       <Snackbar
         open={snackbar.open}
