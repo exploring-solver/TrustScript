@@ -188,7 +188,7 @@ const IssuerDashboard = () => {
 
       {/* Create User Dialog */}
       <Dialog open={openUserDialog} onClose={() => setOpenUserDialog(false)}>
-        <DialogTitle>Create Individual User</DialogTitle>
+        <DialogTitle>Create Individual User (default password is "password")</DialogTitle>
         <DialogContent>
           <TextField
             fullWidth
