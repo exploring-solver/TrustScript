@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { getCertificates } from '@/service/api';
+import CertificateVerification from './CertificateVerification';
 
 const IndividualDashboard = () => {
   const [certificates, setCertificates] = useState([]);
-
+  const documentTypes = [
+    { value: 'birth_certificate', label: 'Birth Certificate'},
+    { value: 'academic_transcript', label: 'Academic Transcript'},
+    { value: 'experience_certificate', label: 'Experience Certificate'},
+  ];
   useEffect(() => {
     fetchCertificates();
   }, []);
@@ -31,10 +36,16 @@ const IndividualDashboard = () => {
   return (
     <div>
       <Typography variant="h5" gutterBottom>My Certificates</Typography>
+      <CertificateVerification/>
+      <br>
+      </br>
+      <br>
+      </br>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Certificate Id</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Issue Date</TableCell>
               <TableCell>Issuer</TableCell>
@@ -42,9 +53,12 @@ const IndividualDashboard = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {certificates.map((cert) => (
+            {certificates.map((cert) => {
+              const documentType = documentTypes.find(doc => doc.value === cert.type);
+              return (
               <TableRow key={cert._id}>
-                <TableCell>{cert.type}</TableCell>
+                <TableCell>{cert._id}</TableCell>
+                <TableCell>{documentType ? documentType.label : cert.type}</TableCell>
                 <TableCell>{new Date(cert.issueDate).toLocaleDateString()}</TableCell>
                 <TableCell>{cert.issuerId}</TableCell>
                 <TableCell>
@@ -56,8 +70,8 @@ const IndividualDashboard = () => {
                   </Button>
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
+            )})}          
+            </TableBody>
         </Table>
       </TableContainer>
     </div>

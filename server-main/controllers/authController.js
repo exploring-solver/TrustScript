@@ -40,9 +40,48 @@ exports.login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
     
-    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '100h' });
     res.json({ token, user: { id: user._id, name: user.name, role: user.role } });
   } catch (error) {
     res.status(500).json({ error: 'Login failed' });
+  }
+};
+
+exports.createIndividualUser = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    const password = "password" // Generate a random password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ name, email, password: hashedPassword, role: 'individual' });
+    await user.save();
+    // In a real-world scenario, you'd want to send this password to the user securely
+    res.status(201).json({ message: 'Individual user created successfully', user: { id: user._id, name: user.name, email: user.email, password: password } });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create individual user' });
+  }
+};
+
+exports.getIndividuals = async (req, res) => {
+  try {
+    const individuals = await User.find({ role: 'individual' }).select('name _id'); // Fetch only name and id
+    res.status(200).json(individuals);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+};
+exports.getIssuers = async (req, res) => {
+  try {
+    const issuers = await User.find({ role: 'issuer' }).select('name _id'); // Fetch only name and id
+    res.status(200).json(issuers);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+};
+exports.getVerifiers = async (req, res) => {
+  try {
+    const verifiers = await User.find({ role: 'verifier' }).select('name _id'); // Fetch only name and id
+    res.status(200).json(verifiers);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch users' });
   }
 };

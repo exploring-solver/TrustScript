@@ -1,18 +1,82 @@
 const Certificate = require('../models/Certificate');
-const { generateBlockchainHash } = require('../utils/blockchain');
+const { generateBlockchainHash, storeOnBlockchain } = require('../utils/blockchain');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const storage = multer.memoryStorage(); // Store the file in memory for further processing
+const upload = multer({ storage: storage }); // Use multer's memory storage
+// Create a directory for storing files if it doesn't exist
+const uploadDir = path.join(__dirname, '..', 'uploads', 'certificates');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
-exports.issueCertificate = async (req, res) => {
-  try {
-    const { type, ownerId, details } = req.body;
-    const issuerId = req.user.id;
-    const blockchainHash = await generateBlockchainHash({ type, ownerId, issuerId, details });
-    const certificate = new Certificate({ type, ownerId, issuerId, blockchainHash, details });
-    await certificate.save();
-    res.status(201).json({ message: 'Certificate issued successfully', certificate });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to issue certificate' });
+exports.issueCertificate = [
+  upload.single('file'), // Handle single file upload with key 'file'
+  async (req, res) => {
+    try {
+      // Log incoming request body
+      console.log('Request Body:', req.body);
+      console.log('Uploaded File:', req.file);
+
+      const { type, ownerId, details } = req.body;
+      const issuerId = req.user.id;
+      const file = req.file;
+
+      if (!file) {
+        console.error('No file uploaded');
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      // Define the directory and file path where the file will be stored
+      const uploadDir = path.join(__dirname, 'uploads');
+      const fileName = `${Date.now()}-${file.originalname}`;
+      const filePath = path.join(uploadDir, fileName);
+
+      // Ensure the upload directory exists
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true }); // Create the directory if it doesn't exist
+        console.log('Uploads directory created.');
+      }
+
+      // Write the file to the local folder
+      fs.writeFileSync(filePath, file.buffer);
+      console.log('File saved successfully at:', filePath);
+
+      const fileUrl = `/uploads/certificates/${fileName}`; // This URL can be used to access the file from the front-end.
+      console.log('File URL:', fileUrl);
+
+      // Generate the blockchain hash
+      console.log('Generating blockchain hash...');
+      const blockchainHash = await generateBlockchainHash({ type, ownerId, issuerId, details, fileUrl });
+      console.log('Blockchain Hash:', blockchainHash);
+
+      // Create and save the certificate record
+      const certificate = new Certificate({
+        type,
+        ownerId,
+        issuerId,
+        blockchainHash,
+        details,
+        fileUrl
+      });
+
+      console.log('Saving certificate record...');
+      await certificate.save();
+      console.log('Certificate saved successfully.');
+
+      // Store additional data on blockchain (mock function call)
+      console.log('Storing additional data on blockchain...');
+      await storeOnBlockchain({ certificateId: certificate._id, blockchainHash, fileUrl });
+      console.log('Additional data stored on blockchain.');
+
+      res.status(201).json({ message: 'Certificate issued successfully', certificate });
+    } catch (error) {
+      console.error('Error issuing certificate:', error);
+      res.status(500).json({ error: 'Failed to issue certificate' });
+    }
   }
-};
+];
 
 exports.getCertificates = async (req, res) => {
   try {
@@ -30,3 +94,37 @@ exports.getCertificates = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch certificates' });
   }
 };
+
+exports.getCertificateDetails = async (req, res) => {
+  try {
+    const certificate = await Certificate.findById(req.params.id)
+      .populate('ownerId', 'name email')
+      .populate('issuerId', 'name');
+
+    if (!certificate) {
+      return res.status(404).json({ error: 'Certificate not found' });
+    }
+
+    res.json(certificate);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch certificate details' });
+  }
+};
+
+
+// exports.getCertificates = async (req, res) => {
+//   try {
+//     const { type, issueDate, issuerId, ownerId } = req.query;
+//     const filter = {};
+
+//     if (type) filter.type = type;
+//     if (issueDate) filter.issueDate = { $gte: new Date(issueDate) };
+//     if (issuerId) filter.issuerId = issuerId;
+//     if (ownerId) filter.ownerId = ownerId;
+
+//     const certificates = await Certificate.find(filter);
+//     res.json(certificates);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching certificates', error: error.message });
+//   }
+// };

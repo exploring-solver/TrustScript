@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from 'react';
-import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
+import {
+  AppBar,
+  Toolbar,
+  Typography,
   IconButton,
   Menu,
   MenuItem,
@@ -101,8 +101,8 @@ function Navbar() {
           <div className="flex items-center space-x-2">
             {!isMobile && menuItems.slice(0, 3).map((item, index) => (
               <Link href={item.link} key={index} passHref>
-                <Button 
-                  color="inherit" 
+                <Button
+                  color="inherit"
                   component="a"
                   startIcon={item.icon}
                   className="hover:bg-blue-700 transition-colors"
@@ -141,8 +141,8 @@ function Navbar() {
             >
               <Link href={"/superadmin"}><MenuItem onClick={handleClose}>Super Admin</MenuItem></Link>
               <Link href={"/login"}><MenuItem onClick={handleClose}>Login</MenuItem></Link>
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <Link href={"/login"}><MenuItem onClick={handleClose}>About Our solution(SIH-2024)</MenuItem></Link>
+              <MenuItem onClick={handleClose}>Help</MenuItem>
               <Divider />
               <MenuItem onClick={handleClose}>Logout</MenuItem>
             </Menu>

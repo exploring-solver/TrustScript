@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from 'react';
-import { 
-  Container, 
-  Typography, 
-  TextField, 
-  Button, 
-  Paper, 
-  Stepper, 
-  Step, 
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  Stepper,
+  Step,
   StepLabel,
   CircularProgress,
   Box,
@@ -17,29 +17,24 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Divider
+  Divider,
 } from '@mui/material';
-import { 
-  
-  FileText, 
-  Image, 
-  CheckCircle, 
-  AlertTriangle, 
-  Info
-} from 'lucide-react';
+import { FileText, Image, CheckCircle, AlertTriangle, Info } from 'lucide-react';
+import { verifyCertificate } from '@/service/api';
 
 const VerifyDocument = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [documentType, setDocumentType] = useState('');
   const [documentFile, setDocumentFile] = useState(null);
+  const [certificateId, setCertificateId] = useState('');
   const [verificationResult, setVerificationResult] = useState(null);
   const [error, setError] = useState('');
 
-  const steps = ['Select Document Type', 'Upload Document', 'Verification'];
+  const steps = ['Select Document Type', 'Upload Document', 'Enter Certificate ID', 'Verification'];
 
   const documentTypes = [
     { value: 'birth_certificate', label: 'Birth Certificate', icon: <FileText className="mr-2" /> },
-    { value: 'academic_transcript', label: 'Academic Transcript', icon: <FileText  className="mr-2" /> },
+    { value: 'academic_transcript', label: 'Academic Transcript', icon: <FileText className="mr-2" /> },
     { value: 'experience_certificate', label: 'Experience Certificate', icon: <Image className="mr-2" /> },
   ];
 
@@ -53,10 +48,14 @@ const VerifyDocument = () => {
       setError('Please upload a document');
       return;
     }
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    if (activeStep === 2) {
+    if (activeStep === 2 && !certificateId) {
+      setError('Please enter a certificate ID');
+      return;
+    }
+    if (activeStep === 3) {
       verifyDocument();
     }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
@@ -66,7 +65,7 @@ const VerifyDocument = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (file && file.size <= 5 * 1024 * 1024) { // 5MB limit
+    if (file && file.size <= 5 * 1024 * 1024) {
       setDocumentFile(file);
       setError('');
     } else {
@@ -74,17 +73,18 @@ const VerifyDocument = () => {
     }
   };
 
-  const verifyDocument = () => {
-    // Simulate document verification process
-    setVerificationResult(null);
-    setTimeout(() => {
-      const results = [
-        { status: 'Verified', message: 'Document successfully verified', details: 'All security features match. Document is authentic.' },
-        { status: 'Warning', message: 'Document verified with warnings', details: 'Some security features could not be verified. Manual review recommended.' },
-        { status: 'Error', message: 'Document verification failed', details: 'Critical security features do not match. Document may be fraudulent.' }
-      ];
-      setVerificationResult(results[Math.floor(Math.random() * results.length)]);
-    }, 3000);
+  const verifyDocument = async () => {
+    const formData = new FormData();
+    formData.append('file', documentFile);
+    formData.append('certificateId', certificateId);
+
+    try {
+      setVerificationResult(null);
+      const response = await verifyCertificate(formData);
+      setVerificationResult(response.data);
+    } catch (err) {
+      setError(err.response?.data?.error || 'An error occurred during verification.');
+    }
   };
 
   const renderStepContent = (step) => {
@@ -93,7 +93,7 @@ const VerifyDocument = () => {
         return (
           <Box>
             <Typography variant="body1" className="mb-4">
-              Select the type of document you want to verify. This helps our system apply the appropriate verification checks.
+              Select the type of document you want to verify.
             </Typography>
             <TextField
               select
@@ -101,9 +101,7 @@ const VerifyDocument = () => {
               label="Document Type"
               value={documentType}
               onChange={(e) => setDocumentType(e.target.value)}
-              SelectProps={{
-                native: true,
-              }}
+              SelectProps={{ native: true }}
             >
               <option value="">Select a document type</option>
               {documentTypes.map((type) => (
@@ -116,7 +114,7 @@ const VerifyDocument = () => {
         return (
           <Box>
             <Typography variant="body1" className="mb-4">
-              Upload your document for verification. We accept PDF, JPG, and PNG formats up to 5MB in size.
+              Upload your document for verification.
             </Typography>
             <input
               accept=".pdf,.jpg,.jpeg,.png"
@@ -138,24 +136,45 @@ const VerifyDocument = () => {
           </Box>
         );
       case 2:
+        return (
+          <Box>
+            <TextField
+              fullWidth
+              label="Certificate ID"
+              value={certificateId}
+              onChange={(e) => setCertificateId(e.target.value)}
+              required
+            />
+          </Box>
+        );
+      case 3:
         return verificationResult ? (
           <Box>
-            <Alert severity={
-              verificationResult.status === 'Verified' ? 'success' : 
-              verificationResult.status === 'Warning' ? 'warning' : 'error'
-            }>
-              <AlertTitle>{verificationResult.status}</AlertTitle>
-              {verificationResult.message}
+            <Alert
+              severity={
+                verificationResult.verification.status === 'Verified'
+                  ? 'success'
+                  : verificationResult.verification.status === 'Warning'
+                  ? 'warning'
+                  : 'error'
+              }
+            >
+              <AlertTitle>{verificationResult.verification.status}</AlertTitle>
+              Is Valid: {verificationResult.isValid ? 'Yes' : 'No'}
             </Alert>
             <Typography variant="body1" className="mt-4 mb-2">Verification Details:</Typography>
             <List>
               <ListItem>
                 <ListItemIcon>
-                  {verificationResult.status === 'Verified' ? <CheckCircle color="success" /> : 
-                   verificationResult.status === 'Warning' ? <AlertTriangle color="warning" /> : 
-                   <Info color="error" />}
+                  {verificationResult.verification.details.fileHashMatch ? <CheckCircle color="success" /> : <Info color="error" />}
                 </ListItemIcon>
-                <ListItemText primary={verificationResult.details} />
+                <ListItemText primary={`File Hash Match: ${verificationResult.verification.details.fileHashMatch ? 'Yes' : 'No'}`} />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  {verificationResult.verification.details.blockchainHashValid ? <CheckCircle color="success" /> : <Info color="error" />}
+                </ListItemIcon>
+                <ListItemText primary={`Blockchain Hash Valid: ${verificationResult.verification.details.blockchainHashValid ? 'Yes' : 'No'}`} />
               </ListItem>
             </List>
           </Box>
@@ -187,18 +206,10 @@ const VerifyDocument = () => {
         {error && <Alert severity="error" className="mb-4">{error}</Alert>}
         <Divider className="my-4" />
         <Box className="flex justify-between">
-          <Button
-            disabled={activeStep === 0}
-            onClick={handleBack}
-          >
+          <Button disabled={activeStep === 0} onClick={handleBack}>
             Back
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleNext}
-            disabled={activeStep === steps.length - 1}
-          >
+          <Button variant="contained" color="primary" onClick={handleNext}>
             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
           </Button>
         </Box>
