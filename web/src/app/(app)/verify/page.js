@@ -39,7 +39,7 @@ const VerifyDocument = () => {
 
   const documentTypes = [
     { value: 'birth_certificate', label: 'Birth Certificate', icon: <FileText className="mr-2" /> },
-    { value: 'academic_transcript', label: 'Academic Transcript', icon: <FileText className="mr-2" /> },
+    { value: 'academic_transcript', label: 'Academic Transcript', icon: <FileText  className="mr-2" /> },
     { value: 'experience_certificate', label: 'Experience Certificate', icon: <Image className="mr-2" /> },
   ];
 
@@ -126,7 +126,7 @@ const VerifyDocument = () => {
               onChange={handleFileChange}
             />
             <label htmlFor="raised-button-file">
-              <Button variant="contained" component="span" startIcon={<FilePdf />}>
+              <Button variant="contained" component="span" startIcon={<FileText />}>
                 Upload Document
               </Button>
             </label>
