@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 const verificationRoutes = require('./routes/verificationRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
+const certificateRoutes = require('./routes/certificateRoutes');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const Verification = require('./models/Verification');
@@ -24,6 +25,7 @@ app.get('/',(req,res) => {
   res.json("Welcome to JalSync API by team ramanujan (sih-2024)!!")
 })
 app.use('/api/auth', authRoutes);
+app.use('/api/certificate', certificateRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/verification', verificationRoutes);
 app.use('/api/analytics', analyticsRoutes);
@@ -51,7 +53,7 @@ const start = async () => {
       { resource: Document, options: { parent: { name: 'Document Management' } } },
       { resource: Verification, options: { parent: { name: 'Verification Management' } } },
     ],
-    rootPath: '/admin',  // Path to access the admin panel
+    rootPath: '/admin',
   };
   
   const admin = new AdminJS(adminOptions);
