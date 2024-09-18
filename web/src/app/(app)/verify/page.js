@@ -29,6 +29,7 @@ const VerifyDocument = () => {
   const [certificateId, setCertificateId] = useState('');
   const [verificationResult, setVerificationResult] = useState(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const steps = ['Select Document Type', 'Upload Document', 'Enter Certificate ID', 'Verification'];
 
@@ -54,8 +55,9 @@ const VerifyDocument = () => {
     }
     if (activeStep === 3) {
       verifyDocument();
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
@@ -79,11 +81,19 @@ const VerifyDocument = () => {
     formData.append('certificateId', certificateId);
 
     try {
+      setLoading(true);
       setVerificationResult(null);
       const response = await verifyCertificate(formData);
-      setVerificationResult(response.data);
+      
+      // Simulate a delay of 2.5 seconds
+      setTimeout(() => {
+        setVerificationResult(response.data);
+        setLoading(false);
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      }, 2500);
     } catch (err) {
       setError(err.response?.data?.error || 'An error occurred during verification.');
+      setLoading(false);
     }
   };
 
@@ -148,7 +158,15 @@ const VerifyDocument = () => {
           </Box>
         );
       case 3:
-        return verificationResult ? (
+        return loading ? (
+          <Box className="text-center">
+            <CircularProgress />
+            <Typography>Verifying document...</Typography>
+            <Box className="flex justify-center mt-4">
+              <span className="loading loading-infinity loading-lg"></span>
+            </Box>
+          </Box>
+        ) : verificationResult ? (
           <Box>
             <Alert
               severity={
@@ -178,12 +196,7 @@ const VerifyDocument = () => {
               </ListItem>
             </List>
           </Box>
-        ) : (
-          <Box className="text-center">
-            <CircularProgress />
-            <Typography>Verifying document...</Typography>
-          </Box>
-        );
+        ) : null;
       default:
         return 'Unknown step';
     }
@@ -206,10 +219,10 @@ const VerifyDocument = () => {
         {error && <Alert severity="error" className="mb-4">{error}</Alert>}
         <Divider className="my-4" />
         <Box className="flex justify-between">
-          <Button disabled={activeStep === 0} onClick={handleBack}>
+          <Button disabled={activeStep === 0 || loading} onClick={handleBack}>
             Back
           </Button>
-          <Button variant="contained" color="primary" onClick={handleNext}>
+          <Button variant="contained" color="primary" onClick={handleNext} disabled={loading}>
             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
           </Button>
         </Box>

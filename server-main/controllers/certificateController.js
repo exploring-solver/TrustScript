@@ -1,8 +1,20 @@
 const Certificate = require('../models/Certificate');
-const { generateBlockchainHash, storeOnBlockchain } = require('../utils/blockchain');
+// const ipfsClient = require('ipfs-http-client');
+// const ipfs = ipfsClient.create({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+const ethers = require('ethers');
+
+
+const {
+  generateBlockchainHash,
+  storeOnBlockchain,
+} = require('../utils/blockchain');
+
 const multer = require('multer');
+
 const fs = require('fs');
+
 const path = require('path');
+
 const storage = multer.memoryStorage(); // Store the file in memory for further processing
 const upload = multer({ storage: storage }); // Use multer's memory storage
 // Create a directory for storing files if it doesn't exist
@@ -12,6 +24,7 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 exports.issueCertificate = [
+  
   upload.single('file'), // Handle single file upload with key 'file'
   async (req, res) => {
     try {
@@ -28,10 +41,15 @@ exports.issueCertificate = [
         return res.status(400).json({ error: 'No file uploaded' });
       }
 
+      
       // Define the directory and file path where the file will be stored
+      const fileBuffer = file.buffer;
+
       const uploadDir = path.join(__dirname, 'uploads');
       const fileName = `${Date.now()}-${file.originalname}`;
       const filePath = path.join(uploadDir, fileName);
+      fs.writeFileSync(filePath, fileBuffer);
+
 
       // Ensure the upload directory exists
       if (!fs.existsSync(uploadDir)) {
@@ -39,38 +57,59 @@ exports.issueCertificate = [
         console.log('Uploads directory created.');
       }
 
+      // Upload file to IPFS
+      // const { cid } = await ipfs.add(fileBuffer);
+      // const ipfsCid = cid.toString();
+
       // Write the file to the local folder
       fs.writeFileSync(filePath, file.buffer);
       console.log('File saved successfully at:', filePath);
 
       const fileUrl = `/uploads/certificates/${fileName}`; // This URL can be used to access the file from the front-end.
       console.log('File URL:', fileUrl);
-
       // Generate the blockchain hash
-      console.log('Generating blockchain hash...');
+      //console.log('Generating blockchain hash...');
       const blockchainHash = await generateBlockchainHash({ type, ownerId, issuerId, details, fileUrl });
       console.log('Blockchain Hash:', blockchainHash);
-
+      
+      // Generate document hash
+      const documentHash = ethers.keccak256(fileBuffer);
+      // Generate a unique docId (could be the hash of the file or a UUID)
+      const docId = ethers.keccak256(ethers.toUtf8Bytes(`${issuerId}-${ownerId}-${Date.now()}`));
       // Create and save the certificate record
+      
+
+      // Store additional data on blockchain (mock function call)
+     // console.log('Storing additional data on blockchain...');
+
+
+      // Store on blockchain
+      const blockchainData = {
+        docId,
+        // ipfsCid: ipfsCid, // Set if using IPFS/
+        documentHash,
+        recipient: ownerId, // Should be an Ethereum address
+      };
+      
+      //await storeOnBlockchain({ certificateId: certificate._id, blockchainHash, fileUrl });
+      //console.log('Additional data stored on blockchain.');
+      const blockchainReceipt = await storeOnBlockchain(blockchainData);
+
       const certificate = new Certificate({
         type,
         ownerId,
         issuerId,
-        blockchainHash,
+        blockchainHash:documentHash,
         details,
-        fileUrl
+        fileUrl,
+        docId,
       });
-
-      console.log('Saving certificate record...');
+      //console.log('Saving certificate record...');
       await certificate.save();
       console.log('Certificate saved successfully.');
 
-      // Store additional data on blockchain (mock function call)
-      console.log('Storing additional data on blockchain...');
-      await storeOnBlockchain({ certificateId: certificate._id, blockchainHash, fileUrl });
-      console.log('Additional data stored on blockchain.');
 
-      res.status(201).json({ message: 'Certificate issued successfully', certificate });
+      res.status(201).json({ message: 'Certificate issued successfully', certificate,blockchainReceipt });
     } catch (error) {
       console.error('Error issuing certificate:', error);
       res.status(500).json({ error: 'Failed to issue certificate' });
