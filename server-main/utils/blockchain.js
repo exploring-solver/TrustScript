@@ -1,12 +1,10 @@
-// utils/blockchain.js
 const crypto = require('crypto');
 const { ethers } = require('ethers');
-const config = require('../config');    
-// Mock function to generate a blockchain hash
+const config = require('../config');
 const DocumentRegistryABI = require('../abis/DocumentRegistry.json'); // Adjust the path as needed
 
 // Create a provider connected to the Hardhat network
-const provider = new ethers.JsonRpcProvider(config.hardhat.url)
+const provider = new ethers.JsonRpcProvider(config.hardhat.url);
 
 // Optionally, you can use a private key to create a signer
 // For testing purposes, you can use one of the accounts provided by Hardhat
@@ -20,13 +18,12 @@ const documentRegistryContract = new ethers.Contract(
   DocumentRegistryABI.abi,
   signer
 );
+
 exports.generateBlockchainHash = async (data) => {
   const jsonString = JSON.stringify(data);
   return ethers.keccak256(ethers.toUtf8Bytes(jsonString));
 };
 
-
-// Mock function to verify a blockchain hash
 exports.verifyBlockchainHash = async (docId, documentHash) => {
   try {
     const document = await documentRegistryContract.getDocument(docId);
@@ -38,8 +35,6 @@ exports.verifyBlockchainHash = async (docId, documentHash) => {
   }
 };
 
-
-// Mock function to store data on the blockchain
 exports.storeOnBlockchain = async (data) => {
   try {
     const { docId, ipfsCid, documentHash, recipient } = data;
@@ -63,8 +58,6 @@ exports.storeOnBlockchain = async (data) => {
   }
 };
 
-
-// Mock function to retrieve data from the blockchain
 exports.retrieveFromBlockchain = async (docId) => {
   try {
     const document = await documentRegistryContract.getDocument(docId);
