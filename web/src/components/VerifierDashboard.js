@@ -17,8 +17,10 @@ const VerifierDashboard = () => {
     issuerId: '',
     ownerId: '',
   });
+
   const [users, setUsers] = useState([]);
   const [issuers, setIssuers] = useState([]);
+  
   useEffect(() => {
     fetchIndividualsHere();
     fetchCertificates();

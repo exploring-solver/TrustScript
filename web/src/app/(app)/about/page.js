@@ -30,7 +30,7 @@ const AboutUs = () => {
         {/* Problem Section */}
         <Box mb={8}>
           <Typography variant="h2" gutterBottom className="text-3xl font-semibold mb-4 text-gray-700">
-            The Problem We're Solving
+            The Problem We&apos;re Solving
           </Typography>
           <Typography variant="body1" color="textSecondary" paragraph className="text-lg leading-relaxed">
             Current document verification processes are inefficient, prone to errors, and vulnerable to fraud. Government agencies, educational institutions, and employers struggle with ensuring the authenticity of key documents like certificates, IDs, and legal paperwork. TrustScript addresses these issues with a secure, AI-driven, blockchain-backed platform.
