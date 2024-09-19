@@ -8,7 +8,7 @@ import {
   Paper, 
   FormControlLabel,
   Checkbox,
-  Grid,
+  Grid2,
   CircularProgress
 } from '@mui/material';
 
@@ -40,8 +40,8 @@ const GenerateReport = () => {
     <Container maxWidth="md" className="mt-8 min-h-screen">
       <Paper className="p-6">
         <Typography variant="h4" className="mb-4">Generate Report</Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
+        <Grid2 container spacing={3}>
+          <Grid2 item xs={12} sm={6}>
             <TextField
               label="Start Date (YYYY-MM-DD)"
               type="date"
@@ -52,8 +52,8 @@ const GenerateReport = () => {
               }}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          </Grid2>
+          <Grid2 item xs={12} sm={6}>
             <TextField
               label="End Date (YYYY-MM-DD)"
               type="date"
@@ -64,8 +64,8 @@ const GenerateReport = () => {
               }}
               fullWidth
             />
-          </Grid>
-          <Grid item xs={12}>
+          </Grid2>
+          <Grid2 item xs={12}>
             <Typography variant="h6" className="mb-2">Report Types</Typography>
             <FormControlLabel
               control={
@@ -97,8 +97,8 @@ const GenerateReport = () => {
               }
               label="User Activity"
             />
-          </Grid>
-          <Grid item xs={12}>
+          </Grid2>
+          <Grid2 item xs={12}>
             <Button
               variant="contained"
               color="primary"
@@ -107,8 +107,8 @@ const GenerateReport = () => {
             >
               Generate Report
             </Button>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
         {generating && (
           <div className="text-center mt-4">
             <CircularProgress />

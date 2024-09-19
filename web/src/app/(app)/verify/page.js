@@ -19,7 +19,7 @@ import {
   ListItemText,
   Divider,
 } from '@mui/material';
-import { FileText, Image, CheckCircle, AlertTriangle, Info } from 'lucide-react';
+import { FileText, Image, CheckCircle, FileCode, Info } from 'lucide-react';
 import { verifyCertificate } from '@/service/api';
 
 const VerifyDocument = () => {
@@ -35,7 +35,7 @@ const VerifyDocument = () => {
 
   const documentTypes = [
     { value: 'birth_certificate', label: 'Birth Certificate', icon: <FileText className="mr-2" /> },
-    { value: 'academic_transcript', label: 'Academic Transcript', icon: <FileText className="mr-2" /> },
+    { value: 'academic_transcript', label: 'Academic Transcript', icon: <FileCode className="mr-2" /> },
     { value: 'experience_certificate', label: 'Experience Certificate', icon: <Image className="mr-2" /> },
   ];
 

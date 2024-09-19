@@ -3,7 +3,7 @@ import React from 'react';
 import {
   Typography,
   Container,
-  Grid,
+  Grid2,
   Link as MuiLink,
   Box,
   Divider,
@@ -22,8 +22,8 @@ function Footer() {
   return (
     <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white mt-8 overflow-x-hidden">
       <Container maxWidth="lg" className="py-12">
-        <Grid container spacing={4}>
-          <Grid item xs={12} sm={6} md={3}>
+        <Grid2 container spacing={4}>
+          <Grid2 item xs={12} sm={6} md={3}>
             <Typography variant="h6" className="mb-4 font-bold">About TrustScript</Typography>
             <Typography variant="body2" className="mb-4">
               Secure and efficient document verification platform powered by AI and blockchain technology.
@@ -42,8 +42,8 @@ function Footer() {
                 </IconButton>
               ))}
             </Box>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          </Grid2>
+          <Grid2 item xs={12} sm={6} md={3}>
             <Typography variant="h6" className="mb-4 font-bold">Quick Links</Typography>
             <ul className="space-y-2">
               {[
@@ -63,8 +63,8 @@ function Footer() {
                 </li>
               ))}
             </ul>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          </Grid2>
+          <Grid2 item xs={12} sm={6} md={3}>
             <Typography variant="h6" className="mb-4 font-bold">Our Services</Typography>
             <ul className="space-y-2">
               {[
@@ -77,8 +77,8 @@ function Footer() {
                 <li key={index} className="text-gray-300">{service}</li>
               ))}
             </ul>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          </Grid2>
+          <Grid2 item xs={12} sm={6} md={3}>
             <Typography variant="h6" className="mb-4 font-bold">Contact Us</Typography>
             <Typography variant="body2" className="mb-2">
               Email: anshjain9159@gmail.com
@@ -89,8 +89,8 @@ function Footer() {
             <Typography variant="body2">
               Address: CSE Block, MAIT Delhi
             </Typography>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
         <Divider className="my-8 bg-gray-600" />
         <Box className="flex flex-col sm:flex-row justify-between items-center">
           <Typography variant="body2" className="text-center sm:text-left mb-4 sm:mb-0">

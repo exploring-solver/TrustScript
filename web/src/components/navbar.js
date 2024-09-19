@@ -15,7 +15,6 @@ import {
   ListItemText,
   useMediaQuery,
   useTheme,
-  Divider,
   Box
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -142,7 +141,7 @@ function Navbar() {
               <Link href={"/superadmin"}><MenuItem onClick={handleClose}>Super Admin</MenuItem></Link>
               <Link href={"/login"}><MenuItem onClick={handleClose}>Login</MenuItem></Link>
               <Link href={'/help'}><MenuItem onClick={handleClose} >Help</MenuItem></Link>
-              <Link href={"/"}><MenuItem onClick={handleClose}>About Our solution(SIH-2024)</MenuItem></Link>
+              <Link href={"/about"}><MenuItem onClick={handleClose}>About Our solution(SIH-2024)</MenuItem></Link>
             </Menu>
           </div>
         </Toolbar>

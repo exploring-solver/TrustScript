@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Snackbar, InputLabel, Select, MenuItem, FormControl } from '@mui/material';
 import { issueCertificate, getCertificates, createIndividualUser, fetchIndividuals } from '@/service/api';
