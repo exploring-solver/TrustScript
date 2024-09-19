@@ -11,7 +11,9 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Paper
+  Paper,
+  AppBar,
+  Toolbar
 } from '@mui/material';
 import { CloudUpload, FileText, CheckCircle, AlertTriangle } from 'lucide-react';
 
@@ -67,7 +69,21 @@ const DocumentUpload = () => {
 
   return (
     <Box className="max-w-2xl mx-auto p-6 min-h-screen bg-base-100">
+      <AppBar position="static">
+        <Toolbar className='flex gap-2'>
+          <Button sx={{border:2}} color="inherit" href="/login">Login</Button>
+          <Button sx={{border:2}} color="inherit" href="/superadmin">SuperAdmin</Button>
+        </Toolbar>
+      </AppBar>
+
       <Paper elevation={6} className="p-6 shadow-lg rounded-lg bg-white">
+        <Typography variant="h6" className="mb-4">
+          **This page is for testing/showcase purposes for the Ministry of Jal Shakti to demonstrate the prototype. Currently, it contains no sensitive or production data. Users can upload sample documents to visualize the functionality.**
+        </Typography>
+        <Typography variant="body2" className="mb-4">
+          To fully test this prototype, please login at <strong>/login</strong> and create an account with admin privileges at <strong>/superadmin</strong>.
+        </Typography>
+
         <Typography variant="h4" className="mb-4 text-center text-primary">Document Upload</Typography>
         <Box className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center mb-4">
           <input
