@@ -1,37 +1,31 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-
 describe("Document Verification Platform", function () {
-  let UserManagement, userManagement, DocumentRegistry, documentRegistry, Verification, verification;
+  let DocumentRegistry, documentRegistry, Verification, verification;
   let admin, issuer, verifier, recipient;
 
   beforeEach(async function () {
     [admin, issuer, verifier, recipient] = await ethers.getSigners();
 
-    UserManagement = await ethers.getContractFactory("UserManagement");
-    [owner, addr1, addr2] = await ethers.getSigners();
-
-    // Deploy a new UserManagement contract before each test
-    userManagement = await UserManagement.deploy();
-    // Wait for the contract to be mined
-    await userManagement.deployTransaction.wait();
-
-    // Deploy DocumentRegistry
+    // Deploy DocumentRegistry (which includes UserManagement functionality)
     DocumentRegistry = await ethers.getContractFactory("DocumentRegistry");
     documentRegistry = await DocumentRegistry.deploy();
-    await documentRegistry.deployed();
+    // Wait for the transaction to be mined
+    await documentRegistry.deployTransaction.wait();
 
     // Deploy Verification
     Verification = await ethers.getContractFactory("Verification");
     verification = await Verification.deploy(documentRegistry.address);
-    await verification.deployed();
+    // Wait for the transaction to be mined
+    await verification.deployTransaction.wait();
 
     // Assign roles
-    await userManagement.connect(admin).addIssuingAuthority(issuer.address);
-    await userManagement.connect(admin).addVerifyingAuthority(verifier.address);
+    await documentRegistry.connect(admin).addIssuingAuthority(issuer.address);
+    await documentRegistry.connect(admin).addVerifyingAuthority(verifier.address);
   });
 
+  
   it("Should allow an issuing authority to issue a document", async function () {
     const docId = ethers.utils.id("document1");
     const ipfsCid = "Qm...";

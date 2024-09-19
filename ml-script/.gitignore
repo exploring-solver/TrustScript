@@ -1,0 +1,6 @@
+env/
+*.ipynb
+*.multiclass
+*.zip
+*.pkl
+*.joblib

@@ -15,8 +15,10 @@ import {
   ListItemText,
   useMediaQuery,
   useTheme,
-  Divider,
-  Box
+  Box,
+  Modal,
+  Backdrop,
+  Fade,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -27,13 +29,15 @@ import PeopleIcon from '@mui/icons-material/People';
 import ExploreIcon from '@mui/icons-material/Explore';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import HelpIcon from '@mui/icons-material/Help';
+import { AllInboxOutlined } from '@mui/icons-material';
 import Link from 'next/link';
 
 function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -47,6 +51,10 @@ function Navbar() {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const toggleNotification = () => {
+    setNotificationOpen(!notificationOpen);
+  };
+
   const menuItems = [
     { text: 'Verify Document', icon: <VerifiedUserIcon />, link: '/verify' },
     { text: 'Upload Document', icon: <DescriptionIcon />, link: '/upload-doc' },
@@ -54,7 +62,7 @@ function Navbar() {
     { text: 'Audit Logs', icon: <AssessmentIcon />, link: '/audit' },
     { text: 'Manage Users', icon: <PeopleIcon />, link: '/manage-user' },
     { text: 'Help Center', icon: <HelpIcon />, link: '/help' },
-    { text: 'Manage User', icon: <HelpIcon />, link: '/manage-user' },
+    { text: 'About Us', icon: <AllInboxOutlined />, link: '/about' },
   ];
 
   const sidebarContent = (
@@ -67,9 +75,9 @@ function Navbar() {
       <List>
         {menuItems.map((item, index) => (
           <Link href={item.link} key={index} passHref>
-            <ListItem button component="a">
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
+            <ListItem button component="a" className="hover:bg-blue-50 transition-colors">
+              <ListItemIcon className="text-blue-600">{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} className="text-gray-800" />
             </ListItem>
           </Link>
         ))}
@@ -77,10 +85,17 @@ function Navbar() {
     </Box>
   );
 
+  const notifications = [
+    { id: 1, message: 'Document verification completed.', timestamp: '2024-09-17 09:15:30' },
+    { id: 2, message: 'New document uploaded by John Doe.', timestamp: '2024-09-17 10:30:45' },
+    { id: 3, message: 'Document review required.', timestamp: '2024-09-17 11:45:00' },
+    { id: 4, message: 'System update available.', timestamp: '2024-09-17 12:00:00' },
+  ];
+
   return (
     <>
-      <AppBar position="static" className="bg-gradient-to-r from-blue-600 to-blue-800">
-        <Toolbar className="justify-between">
+      <AppBar position="static" className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-md">
+        <Toolbar className="justify-between px-4">
           <div className="flex items-center">
             <IconButton
               size="large"
@@ -88,12 +103,12 @@ function Navbar() {
               color="inherit"
               aria-label="menu"
               onClick={toggleSidebar}
-              sx={{ mr: 2 }}
+              className="mr-2 hover:bg-blue-700 transition-colors"
             >
               <MenuIcon />
             </IconButton>
             <Link href="/" passHref>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1, cursor: 'pointer', fontWeight: 'bold' }}>
+              <Typography variant="h6" component="div" className="cursor-pointer font-bold text-white hover:text-blue-200 transition-colors">
                 TrustScript
               </Typography>
             </Link>
@@ -105,13 +120,13 @@ function Navbar() {
                   color="inherit"
                   component="a"
                   startIcon={item.icon}
-                  className="hover:bg-blue-700 transition-colors"
+                  className="hover:bg-blue-700 transition-colors text-sm"
                 >
                   {item.text}
                 </Button>
               </Link>
             ))}
-            <IconButton size="large" aria-label="show notifications" color="inherit">
+            <IconButton size="large" aria-label="show notifications" color="inherit" onClick={toggleNotification} className="hover:bg-blue-700 transition-colors">
               <NotificationsIcon />
             </IconButton>
             <IconButton
@@ -121,6 +136,7 @@ function Navbar() {
               aria-haspopup="true"
               onClick={handleMenu}
               color="inherit"
+              className="hover:bg-blue-700 transition-colors"
             >
               <AccountCircle />
             </IconButton>
@@ -139,10 +155,18 @@ function Navbar() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <Link href={"/superadmin"}><MenuItem onClick={handleClose}>Super Admin</MenuItem></Link>
-              <Link href={"/login"}><MenuItem onClick={handleClose}>Login</MenuItem></Link>
-              <Link href={'/help'}><MenuItem onClick={handleClose} >Help</MenuItem></Link>
-              <Link href={"/"}><MenuItem onClick={handleClose}>About Our solution(SIH-2024)</MenuItem></Link>
+              <MenuItem onClick={handleClose} className="hover:bg-blue-50 transition-colors">
+                <Link href="/superadmin" className="text-gray-800 no-underline">Super Admin</Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose} className="hover:bg-blue-50 transition-colors">
+                <Link href="/login" className="text-gray-800 no-underline">Login</Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose} className="hover:bg-blue-50 transition-colors">
+                <Link href="/help" className="text-gray-800 no-underline">Help</Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose} className="hover:bg-blue-50 transition-colors">
+                <Link href="/about" className="text-gray-800 no-underline">About Our Solution (SIH-2024)</Link>
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>
@@ -151,9 +175,43 @@ function Navbar() {
         anchor="left"
         open={sidebarOpen}
         onClose={toggleSidebar}
+        classes={{ paper: "bg-white" }}
       >
         {sidebarContent}
       </Drawer>
+      <Modal
+        open={notificationOpen}
+        onClose={toggleNotification}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={notificationOpen}>
+          <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg w-96">
+            <Typography variant="h6" className="mb-4 text-center text-gray-800">Notifications</Typography>
+            <List>
+              {notifications.map((notification) => (
+                <ListItem key={notification.id} className="border-b border-gray-200">
+                  <ListItemText
+                    primary={notification.message}
+                    secondary={notification.timestamp}
+                  />
+                </ListItem>
+              ))}
+            </List>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={toggleNotification}
+              className="mt-4 w-full"
+            >
+              Close
+            </Button>
+          </Box>
+        </Fade>
+      </Modal>
     </>
   );
 }
