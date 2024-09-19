@@ -93,7 +93,7 @@ const TrustScriptHomepage = () => {
     ];
 
     return (
-        <div className="min-h-screen py-12 px-6 bg-gradient-to-r from-blue-100 to-green-100">
+        <div className="min-h-screen py-20 px-6 bg-gradient-to-r from-blue-100 to-green-100">
             <motion.div
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}

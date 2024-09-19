@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -33,11 +33,20 @@ import { AllInboxOutlined } from '@mui/icons-material';
 import Link from 'next/link';
 
 function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -94,7 +103,7 @@ function Navbar() {
 
   return (
     <>
-      <AppBar position="static" className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-md">
+      <AppBar position="static" className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300   ${isScrolled ? 'bg-gradient-to-r  from-blue-600 to-blue-800 shadow-md' : 'bg-gradient-to-r  from-blue-600 to-blue-800 shadow-md'}`}>
         <Toolbar className="justify-between px-4">
           <div className="flex items-center">
             <IconButton

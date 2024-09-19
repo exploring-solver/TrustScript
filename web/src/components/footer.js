@@ -19,7 +19,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white mt-8">
+    <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white ">
       <Container maxWidth="lg" className="py-12">
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6} md={3}>
