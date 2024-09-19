@@ -1,5 +1,7 @@
 "use client";
-import React from 'react';
+import React,{useState,useEffect} from 'react';
+import { motion } from 'framer-motion';
+
 import { 
   AppBar, 
   Toolbar, 
@@ -32,7 +34,46 @@ ChartJS.register(
   Legend
 );
 
+const Carousel = ({ images }) => {
+  
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  return (
+    <div className="relative w-full h-64 overflow-hidden rounded-lg m-auto">
+      {images.map((image, index) => (
+        <motion.img
+          key={index}
+          src={image}
+          alt={`Slide ${index + 1}`}
+          className="absolute w-full m-auto h-full object-fit"
+          initial={{ opacity: 0, x: '100%' }}
+          animate={{
+            opacity: index === currentIndex ? 1 : 0,
+            x: index === currentIndex ? '0%' : '-100%',
+          }}
+          transition={{ duration: 0.5 }}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Dashboard = () => {
+  const carouselImages = [
+    '1.jpg',
+    '3.jpg',
+    '7.jpg',
+    '11.jpg',
+    '15.jpg',
+  ];
   const chartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
@@ -109,6 +150,16 @@ const Dashboard = () => {
           </Grid>
 
           {/* Quick Actions */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="mb-12 bg-white px-6 py-8 rounded-lg shadow-lg"
+          >
+          <h2 className="text-2xl font-semibold mb-4  text-center">Project Highlights</h2>
+          <Carousel images={carouselImages} />
+        </motion.div>
+
           <Grid item xs={12}>
             <Paper className="p-4">
               <Typography variant="h6" className="mb-4">Quick Actions</Typography>
@@ -125,6 +176,7 @@ const Dashboard = () => {
               </div>
             </Paper>
           </Grid>
+
         </Grid>
       </Container>
     </div>
