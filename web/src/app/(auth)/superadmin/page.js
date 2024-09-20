@@ -16,7 +16,7 @@ const SuperAdminPage = () => {
           Super Admin Dashboard
         </Typography>
         <Typography variant="body1" paragraph>
-          This prototype demonstrates the key features and functionalities of the super admin interface. It is designed to provide an overview of the system's capabilities in managing water resources and related data. Please note that all interactions within this prototype are simulated and do not affect any real-world systems or data.
+          This prototype demonstrates the key features and functionalities of the super admin interface. It is designed to provide an overview of the system&apos;s capabilities in managing water resources and related data. Please note that all interactions within this prototype are simulated and do not affect any real-world systems or data.
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
           <SuperAdminDashboard />

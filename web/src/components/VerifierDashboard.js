@@ -26,7 +26,7 @@ const VerifierDashboard = () => {
     fetchCertificates();
     fetchVerifications();
     fetchIssuersHere();
-  }, []);
+  }, [fetchCertificates, fetchIssuers, fetchIndividual]);
 
   const fetchIndividualsHere = async () => {
     try {
