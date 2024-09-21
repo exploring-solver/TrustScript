@@ -44,4 +44,10 @@ contract AIVerification is AccessControl {
         require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Only admin can assign oracle");
         _grantRole(ORACLE_ROLE, _oracle);
     }
+    // function requestVerificationFromAI(bytes32 _docId) public view {
+    // // Integration with an off-chain oracle service
+    // require(hasRole(ORACLE_ROLE, msg.sender), "Caller is not authorized");
+    // // Logic to request AI verification results off-chain
+    // }
+
 }

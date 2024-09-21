@@ -4,8 +4,7 @@ const { generateBlockchainHash, storeOnBlockchain } = require('../utils/blockcha
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-// const ipfsClient = require('ipfs-http-client');
-// const ipfs = ipfsClient.create({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+
 const storage = multer.memoryStorage(); // Store the file in memory for further processing
 const upload = multer({ storage: storage }); // Use multer's memory storage
 

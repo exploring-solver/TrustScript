@@ -1,3 +1,4 @@
+require('dotenv').config(); // Load environment variables
 module.exports = {
     
     hardhat: {
@@ -15,5 +16,6 @@ module.exports = {
       // Add other contract addresses as needed
 
     },
+    privateKey: process.env.PRIVATE_KEY
   };
   

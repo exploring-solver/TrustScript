@@ -2,13 +2,14 @@ const crypto = require('crypto');
 const { ethers } = require('ethers');
 const config = require('../config');
 const DocumentRegistryABI = require('../abis/DocumentRegistry.json'); // Adjust the path as needed
+require('dotenv').config();
 
 // Create a provider connected to the Hardhat network
 const provider = new ethers.JsonRpcProvider(config.hardhat.url);
 
 // Optionally, you can use a private key to create a signer
 // For testing purposes, you can use one of the accounts provided by Hardhat
-const privateKey = '0x8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba'; // Replace with a private key from Hardhat node
+const privateKey = process.env.PRIVATE_KEY;
 const signer = new ethers.Wallet(privateKey, provider);
 
 // Load the DocumentRegistry contract

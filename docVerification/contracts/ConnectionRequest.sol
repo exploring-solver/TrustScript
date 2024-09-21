@@ -48,6 +48,8 @@ contract CorrectionRequest is AccessControl {
 
         correctionRequests[_requestId].status = _status;
         correctionRequests[_requestId].issuerResponse = _issuerResponse;
+        correctionRequests[_requestId].timestamp = block.timestamp; // Update timestamp for when reviewed
+
 
         emit CorrectionReviewed(_requestId, _status, _issuerResponse);
     }

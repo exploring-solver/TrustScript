@@ -13,6 +13,7 @@ contract ConsentManagement {
     }
 
     function revokeConsent(string memory _consentType) public {
+        require(consents[msg.sender][_consentType] == true, "Consent not given");
         consents[msg.sender][_consentType] = false;
         emit ConsentRevoked(msg.sender, _consentType);
     }

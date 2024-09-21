@@ -17,6 +17,7 @@ contract DocumentRegistry is UserManagement {
 
     event DocumentIssued(bytes32 indexed docId, address indexed issuer, address indexed recipient);
     event DocumentRevoked(bytes32 indexed docId, address indexed issuer);
+    event DocumentViewed(bytes32 indexed docId, address indexed viewer, uint256 timestamp);
 
     function issueDocument(bytes32 _docId, string memory _ipfsCid, bytes32 _documentHash, address _recipient) public {
         require(hasRole(ISSUER_ROLE, msg.sender), "Caller is not an issuing authority");
@@ -43,7 +44,9 @@ contract DocumentRegistry is UserManagement {
         emit DocumentRevoked(_docId, msg.sender);
     }
 
-    function getDocument(bytes32 _docId) public view returns (Document memory) {
+    // Removed 'view' since we are emitting an event
+    function getDocument(bytes32 _docId) public returns (Document memory) {
+        emit DocumentViewed(_docId, msg.sender, block.timestamp);
         return documents[_docId];
     }
 }
