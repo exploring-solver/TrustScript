@@ -321,7 +321,7 @@ const VerifyDocument = () => {
       setVerificationResult(null);
       
       // Make the API request to the /upload endpoint
-      const response = await axios.post('http://localhost:5000/upload', formData, {
+      const response = await axios.post('https://trustscript-llg5.onrender.com/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
