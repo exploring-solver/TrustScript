@@ -10,8 +10,12 @@ import io
 import pandas as pd
 from PIL import Image
 
+from flask_cors import CORS  # Import CORS
+
 # Initialize Flask app
 app = Flask(__name__)
+
+CORS(app)
 
 # Initialize EasyOCR reader
 reader = easyocr.Reader(['en'], gpu=True)
@@ -98,77 +102,77 @@ def upload_file():
 
 
 
-from sklearn.preprocessing import LabelEncoder
-categories = ['No Failure', 'Heat Dissipation Failure', 'Power Failure', 'Overstrain Failure', 'Tool Wear Failure', 'Random Failures']
-custom_encoder = {cat: i for i, cat in enumerate(categories)}
+# from sklearn.preprocessing import LabelEncoder
+# categories = ['No Failure', 'Heat Dissipation Failure', 'Power Failure', 'Overstrain Failure', 'Tool Wear Failure', 'Random Failures']
+# custom_encoder = {cat: i for i, cat in enumerate(categories)}
 
-import joblib
+# import joblib
 
-model_path = 'model2.joblib'
-model = joblib.load(model_path)
+# model_path = 'model2.joblib'
+# model = joblib.load(model_path)
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    # Get parameters from request
-    data = request.json
-    try:
-        type_value = data['Type']
-        air_temp = data['Air temperature [K]']
-        process_temp = data['Process temperature [K]']
-        rotational_speed = data['Rotational speed [rpm]']
-        torque = data['Torque [Nm]']
-        tool_wear = data['Tool wear [min]']
-    except KeyError as e:
-        return jsonify({'error': f'Missing parameter: {str(e)}'}), 400
+# @app.route('/predict', methods=['POST'])
+# def predict():
+#     # Get parameters from request
+#     data = request.json
+#     try:
+#         type_value = data['Type']
+#         air_temp = data['Air temperature [K]']
+#         process_temp = data['Process temperature [K]']
+#         rotational_speed = data['Rotational speed [rpm]']
+#         torque = data['Torque [Nm]']
+#         tool_wear = data['Tool wear [min]']
+#     except KeyError as e:
+#         return jsonify({'error': f'Missing parameter: {str(e)}'}), 400
 
-    # Convert parameters to a 2D DataFrame
-    input_data = pd.DataFrame([[type_value, air_temp, process_temp, rotational_speed, torque, tool_wear]],
-                              columns=['Type', 'Air temperature [K]', 'Process temperature [K]', 
-                                       'Rotational speed [rpm]', 'Torque [Nm]', 'Tool wear [min]'])
+#     # Convert parameters to a 2D DataFrame
+#     input_data = pd.DataFrame([[type_value, air_temp, process_temp, rotational_speed, torque, tool_wear]],
+#                               columns=['Type', 'Air temperature [K]', 'Process temperature [K]', 
+#                                        'Rotational speed [rpm]', 'Torque [Nm]', 'Tool wear [min]'])
 
-    # Make prediction using model
-    prediction = model.predict(input_data)
+#     # Make prediction using model
+#     prediction = model.predict(input_data)
 
-    # Find the value from custom_encoder based on prediction
-    value = {i for i in custom_encoder if custom_encoder[i] == prediction[0]}
+#     # Find the value from custom_encoder based on prediction
+#     value = {i for i in custom_encoder if custom_encoder[i] == prediction[0]}
 
-    # Return the value as JSON
-    return jsonify({'value': list(value)})
+#     # Return the value as JSON
+#     return jsonify({'value': list(value)})
 
 # Load the LightGBM model
-model_path_2 = "lgbm_model.pkl"
-lgbm_model = joblib.load(model_path_2)
+# model_path_2 = "lgbm_model.pkl"
+# lgbm_model = joblib.load(model_path_2)
 
-@app.route('/predict2', methods=['POST'])
-def predict_sales():
-    # Get data from the request
-    data = request.get_json()
+# @app.route('/predict2', methods=['POST'])
+# def predict_sales():
+#     # Get data from the request
+#     data = request.get_json()
     
-    # Extract inputs from the request JSON
-    dates = data.get("date", [])
-    stores = data.get("store", [])
-    items = data.get("item", [])
+#     # Extract inputs from the request JSON
+#     dates = data.get("date", [])
+#     stores = data.get("store", [])
+#     items = data.get("item", [])
     
-    # Check if the input is valid
-    if not dates or not stores or not items:
-        return jsonify({"error": "Missing 'date', 'store', or 'item' in the input data"}), 400
+#     # Check if the input is valid
+#     if not dates or not stores or not items:
+#         return jsonify({"error": "Missing 'date', 'store', or 'item' in the input data"}), 400
 
-    # Create a DataFrame from the input data
-    test_data = pd.DataFrame({"date": dates, "store": stores, "item": items})
+#     # Create a DataFrame from the input data
+#     test_data = pd.DataFrame({"date": dates, "store": stores, "item": items})
     
-    # Predict sales using the loaded LightGBM model
-    test_preds = lgbm_model.predict(test_data)
+#     # Predict sales using the loaded LightGBM model
+#     test_preds = lgbm_model.predict(test_data)
     
-    # Prepare the forecast DataFrame
-    forecast = pd.DataFrame({
-        "date": test_data["date"],
-        "store": test_data["store"],
-        "item": test_data["item"],
-        "sales": test_preds
-    })
+#     # Prepare the forecast DataFrame
+#     forecast = pd.DataFrame({
+#         "date": test_data["date"],
+#         "store": test_data["store"],
+#         "item": test_data["item"],
+#         "sales": test_preds
+#     })
 
-    # Convert the DataFrame to JSON and return the response
-    return jsonify(forecast.to_dict(orient="records"))
+#     # Convert the DataFrame to JSON and return the response
+#     return jsonify(forecast.to_dict(orient="records"))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
