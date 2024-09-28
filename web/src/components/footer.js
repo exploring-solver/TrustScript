@@ -7,44 +7,42 @@ import {
   Link as MuiLink,
   Box,
   Divider,
-  IconButton,
 } from '@mui/material';
 import Link from 'next/link';
+import { Github, Twitter, Linkedin } from 'lucide-react';
 
 function Footer() {
   const socialIcons = [
-    { name: 'GitHub', link: "https://github.com/exploring-solver/TrustScript" },
-    { name: 'Twitter', link: "twitter.com/home" },
-    { name: 'LinkedIn', link: "/" },
-    
+    { name: 'GitHub', icon: Github, link: "https://github.com/exploring-solver/TrustScript" },
+    { name: 'Twitter', icon: Twitter, link: "https://twitter.com/home" },
+    { name: 'LinkedIn', icon: Linkedin, link: "/" },
   ];
 
   return (
-    <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white mt-8 overflow-x-hidden">
+    <footer className="bg-gradient-to-r from-gray-800 to-gray-900 text-white ">
       <Container maxWidth="lg" className="py-12">
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" className="mb-4 font-bold">About TrustScript</Typography>
-            <Typography variant="body2" className="mb-4">
+            <Typography variant="h6" className="mb-4 font-bold text-blue-300">About TrustScript</Typography>
+            <Typography variant="body2" className="mb-4 text-gray-300">
               Secure and efficient document verification platform powered by AI and blockchain technology.
             </Typography>
-            <Box className="flex space-x-2">
-              {socialIcons.map(({ name, link }, index) => (
-                <IconButton
+            <Box className="flex space-x-4">
+              {socialIcons.map(({ name, icon: Icon, link }, index) => (
+                <MuiLink
                   key={index}
                   href={link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  size="small"
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white transition-colors"
                 >
-                  {name[0]}
-                </IconButton>
+                  <Icon size={24} />
+                </MuiLink>
               ))}
             </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" className="mb-4 font-bold">Quick Links</Typography>
+            <Typography variant="h6" className="mb-4 font-bold text-blue-300">Quick Links</Typography>
             <ul className="space-y-2">
               {[
                 { href: "/", text: "Home" },
@@ -65,7 +63,7 @@ function Footer() {
             </ul>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" className="mb-4 font-bold">Our Services</Typography>
+            <Typography variant="h6" className="mb-4 font-bold text-blue-300">Our Services</Typography>
             <ul className="space-y-2">
               {[
                 "AI-Powered Verification",
@@ -79,24 +77,23 @@ function Footer() {
             </ul>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" className="mb-4 font-bold">Contact Us</Typography>
-            <Typography variant="body2" className="mb-2">
+            <Typography variant="h6" className="mb-4 font-bold text-blue-300">Contact Us</Typography>
+            <Typography variant="body2" className="mb-2 text-gray-300">
               Email: anshjain9159@gmail.com
             </Typography>
-            <Typography variant="body2" className="mb-2">
+            <Typography variant="body2" className="mb-2 text-gray-300">
               Phone: +91 (XXX) XXX-XXXX
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body2" className="text-gray-300">
               Address: CSE Block, MAIT Delhi
             </Typography>
           </Grid>
         </Grid>
         <Divider className="my-8 bg-gray-600" />
         <Box className="flex flex-col sm:flex-row justify-between items-center">
-          <Typography variant="body2" className="text-center sm:text-left mb-4 sm:mb-0">
+          <Typography variant="body2" className="text-center sm:text-left mb-4 sm:mb-0 text-gray-400">
             © 2024 TrustScript. All rights reserved.
           </Typography>
-          
         </Box>
       </Container>
     </footer>

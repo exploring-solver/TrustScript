@@ -4,8 +4,7 @@ const { generateBlockchainHash, storeOnBlockchain } = require('../utils/blockcha
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-// const ipfsClient = require('ipfs-http-client');
-// const ipfs = ipfsClient.create({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+
 const storage = multer.memoryStorage(); // Store the file in memory for further processing
 const upload = multer({ storage: storage }); // Use multer's memory storage
 
@@ -72,7 +71,7 @@ exports.issueCertificate = [
         recipient: ownerId, // Should be an Ethereum address
       };
 
-      const blockchainReceipt = await storeOnBlockchain(blockchainData);
+      // const blockchainReceipt = await storeOnBlockchain(blockchainData);
 
       const certificate = new Certificate({
         type,
@@ -87,7 +86,7 @@ exports.issueCertificate = [
       await certificate.save();
       console.log('Certificate saved successfully.');
 
-      res.status(201).json({ message: 'Certificate issued successfully', certificate, blockchainReceipt });
+      res.status(201).json({ message: 'Certificate issued successfully', certificate });
     } catch (error) {
       console.error('Error issuing certificate:', error);
       res.status(500).json({ error: 'Failed to issue certificate' });

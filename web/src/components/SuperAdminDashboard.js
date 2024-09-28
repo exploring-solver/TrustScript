@@ -43,7 +43,6 @@ const SuperAdminDashboard = () => {
 
   return (
     <Box>
-      <Typography variant="h5" gutterBottom>SuperAdmin Dashboard</Typography>
       <Typography variant="h6" gutterBottom>Register New User</Typography>
       <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400 }}>
         <TextField

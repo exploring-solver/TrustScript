@@ -252,6 +252,8 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  AppBar,
+  Toolbar,
 } from '@mui/material';
 import { FileText, Image, CheckCircle, AlertTriangle, Info } from 'lucide-react';
 import axios from 'axios'; // Using axios for API calls
@@ -269,7 +271,7 @@ const VerifyDocument = () => {
 
   const documentTypes = [
     { value: 'birth_certificate', label: 'Birth Certificate', icon: <FileText className="mr-2" /> },
-    { value: 'academic_transcript', label: 'Academic Transcript', icon: <FileText className="mr-2" /> },
+    { value: 'academic_transcript', label: 'Academic Transcript', icon: <FileCode className="mr-2" /> },
     { value: 'experience_certificate', label: 'Experience Certificate', icon: <Image className="mr-2" /> },
     { value: 'aadhar_card', label: 'Aadhaar Card', icon: <Image className="mr-2" /> },
   ];
@@ -353,7 +355,7 @@ const VerifyDocument = () => {
               onChange={(e) => setDocumentType(e.target.value)}
               SelectProps={{ native: true }}
             >
-              <option value="">Select a document type</option>
+              <option value=""></option>
               {documentTypes.map((type) => (
                 <option key={type.value} value={type.value}>{type.label}</option>
               ))}
@@ -439,7 +441,21 @@ const VerifyDocument = () => {
 
   return (
     <Container maxWidth="md" className="mt-8 min-h-screen">
-      <Paper className="p-6">
+      <AppBar position="static">
+        <Toolbar className='flex gap-2'>
+          <Button sx={{border:2}} color="inherit" href="/login">Login</Button>
+          <Button sx={{border:2}} color="inherit" href="/superadmin">SuperAdmin</Button>
+        </Toolbar>
+      </AppBar>
+
+      <Paper className="p-6 mt-6">
+        <Typography variant="h6" className="mb-4">
+          This page is for showing the workflow of blockchain verification of document for the Ministry of Jal Shakti to demonstrate the workflow of the prototype. It currently contains no sensitive or production data. Users can test document verification features.
+        </Typography>
+        <Typography variant="body2" className="mb-4">
+          To fully test this prototype, please login at <strong>/login</strong> and create an account with admin privileges at <strong>/superadmin</strong>.
+        </Typography>
+
         <Typography variant="h4" className="mb-4">Verify Document</Typography>
         <Stepper activeStep={activeStep} className="mb-6">
           {steps.map((label) => (
@@ -467,3 +483,4 @@ const VerifyDocument = () => {
 };
 
 export default VerifyDocument;
+

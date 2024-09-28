@@ -7,25 +7,27 @@ describe("Document Verification Platform", function () {
 
   beforeEach(async function () {
     [admin, issuer, verifier, recipient] = await ethers.getSigners();
-
+  
     // Deploy DocumentRegistry (which includes UserManagement functionality)
     DocumentRegistry = await ethers.getContractFactory("DocumentRegistry");
     documentRegistry = await DocumentRegistry.deploy();
-    // Wait for the transaction to be mined
-    await documentRegistry.deployTransaction.wait();
-
-    // Deploy Verification
+  
+    // Ensure documentRegistry is deployed successfully and has an address
+    await documentRegistry.deployTransaction.wait();  // Wait for the deployment to complete
+  
+    // Deploy Verification with the address of documentRegistry
     Verification = await ethers.getContractFactory("Verification");
     verification = await Verification.deploy(documentRegistry.address);
-    // Wait for the transaction to be mined
+  
+    // Ensure verification contract is deployed successfully
     await verification.deployTransaction.wait();
-
+  
     // Assign roles
     await documentRegistry.connect(admin).addIssuingAuthority(issuer.address);
     await documentRegistry.connect(admin).addVerifyingAuthority(verifier.address);
   });
-
   
+
   it("Should allow an issuing authority to issue a document", async function () {
     const docId = ethers.utils.id("document1");
     const ipfsCid = "Qm...";
