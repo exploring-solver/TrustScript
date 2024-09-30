@@ -255,7 +255,7 @@ import {
   AppBar,
   Toolbar,
 } from '@mui/material';
-import { FileText, Image, CheckCircle, AlertTriangle, Info } from 'lucide-react';
+import { FileText, Image, CheckCircle, AlertTriangle, Info, FileCode } from 'lucide-react';
 import axios from 'axios'; // Using axios for API calls
 
 const VerifyDocument = () => {
