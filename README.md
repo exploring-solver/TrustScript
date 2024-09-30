@@ -117,14 +117,6 @@ Developed for the **Smart India Hackathon 2024** (Problem Statement 1709 for the
 - **Verifiers**: Authenticate documents using AI-powered verification tools.
 - **Individuals**: Access, share, and manage digital certificates in a centralized portal.
 
-## Contributing
-
-We welcome contributions! Please fork the repository and create a pull request with your feature or bug fix.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
 ## Acknowledgments
 
 - **Smart India Hackathon 2024**: Developed for Problem Statement 1709 for the Ministry of Power.
